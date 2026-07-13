@@ -50,7 +50,7 @@ resource "aws_iam_role_policy" "ecs_task_manager" {
           "ecs:DeleteTaskDefinitions"
         ],
         Resource = [
-          "arn:aws:ecs:${local.ecs_cluster_arn_parts.region}:${local.ecs_cluster_arn_parts.account_id}:task-definition/humanitec_*",
+          "arn:aws:ecs:${local.ecs_cluster_arn_parts.region}:${local.ecs_cluster_arn_parts.account_id}:task-definition/platform_orchestrator_*",
         ]
       },
       {
@@ -62,7 +62,7 @@ resource "aws_iam_role_policy" "ecs_task_manager" {
           "ecs:TagResource",
         ],
         Resource = [
-          "arn:aws:ecs:${local.ecs_cluster_arn_parts.region}:${local.ecs_cluster_arn_parts.account_id}:task-definition/humanitec_*",
+          "arn:aws:ecs:${local.ecs_cluster_arn_parts.region}:${local.ecs_cluster_arn_parts.account_id}:task-definition/platform_orchestrator_*",
           "arn:aws:ecs:${local.ecs_cluster_arn_parts.region}:${local.ecs_cluster_arn_parts.account_id}:cluster/${local.ecs_cluster_name}",
           "arn:aws:ecs:${local.ecs_cluster_arn_parts.region}:${local.ecs_cluster_arn_parts.account_id}:task/${local.ecs_cluster_name}/*",
           "arn:aws:ecs:${local.ecs_cluster_arn_parts.region}:${local.ecs_cluster_arn_parts.account_id}:container-instance/${local.ecs_cluster_name}/*"

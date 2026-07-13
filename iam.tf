@@ -1,4 +1,4 @@
-# OIDC provider for Humanitec federation
+# OIDC provider for Platform Orchestrator federation
 resource "aws_iam_openid_connect_provider" "oidc" {
   count = local.create_oidc_provider ? 1 : 0
   url   = "https://${local.oidc_hostname}"
@@ -25,7 +25,7 @@ resource "aws_iam_role" "ecs_task_manager" {
         Condition = {
           StringEquals = {
             "${local.oidc_hostname}:aud" = "sts.amazonaws.com"
-            "${local.oidc_hostname}:sub" = "${var.humanitec_org_id}+${local.runner_id}"
+            "${local.oidc_hostname}:sub" = "${local.orchestrator_org_id}+${local.runner_id}"
           }
         }
       }

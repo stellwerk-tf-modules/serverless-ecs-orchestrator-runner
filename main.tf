@@ -1,4 +1,4 @@
-# Main Terraform configuration for ECS Runner with Humanitec Platform Orchestrator
+# Main Terraform configuration for ECS Runner with Platform Orchestrator
 # This is a skeleton module that will be expanded with actual resources
 
 # Generate a runner ID if one is not provided
@@ -15,6 +15,7 @@ resource "random_id" "suffix" {
 
 locals {
   runner_id             = var.runner_id != null ? var.runner_id : random_id.runner_id[0].hex
+  orchestrator_org_id   = var.orchestrator_org_id != null ? var.orchestrator_org_id : var.humanitec_org_id
   create_ecs_cluster    = var.existing_ecs_cluster_name == null
   create_vpc            = length(var.subnet_ids) == 0
   ecs_cluster_name      = var.existing_ecs_cluster_name != null ? var.existing_ecs_cluster_name : aws_ecs_cluster.main[0].name
@@ -29,4 +30,11 @@ locals {
     },
     var.additional_tags
   )
+}
+
+check "orchestrator_org_id" {
+  assert {
+    condition     = try(trimspace(local.orchestrator_org_id) != "", false)
+    error_message = "Set orchestrator_org_id. The deprecated humanitec_org_id alias is accepted during migration."
+  }
 }

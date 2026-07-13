@@ -23,10 +23,10 @@ run "test_with_explicit_runner_id" {
   command = plan
 
   variables {
-    region           = "us-east-1"
-    subnet_ids       = ["subnet-12345678", "subnet-87654321"]
-    runner_id        = "test-runner"
-    humanitec_org_id = "test-org-123"
+    region              = "us-east-1"
+    subnet_ids          = ["subnet-12345678", "subnet-87654321"]
+    runner_id           = "test-runner"
+    orchestrator_org_id = "test-org-123"
   }
 
   assert {
@@ -39,10 +39,10 @@ run "test_with_custom_prefix" {
   command = plan
 
   variables {
-    region           = "eu-west-1"
-    subnet_ids       = ["subnet-12345678"]
-    runner_id_prefix = "test-prefix"
-    humanitec_org_id = "test-org-456"
+    region              = "eu-west-1"
+    subnet_ids          = ["subnet-12345678"]
+    runner_id_prefix    = "test-prefix"
+    orchestrator_org_id = "test-org-456"
   }
 
   # Note: runner_id and ecs_cluster_name contain random values only known at apply time
@@ -53,13 +53,28 @@ run "test_with_defaults" {
   command = plan
 
   variables {
-    region           = "ap-southeast-1"
-    subnet_ids       = ["subnet-abc123"]
-    humanitec_org_id = "test-org-789"
+    region              = "ap-southeast-1"
+    subnet_ids          = ["subnet-abc123"]
+    orchestrator_org_id = "test-org-789"
   }
 
   # Note: runner_id and ecs_cluster_name contain random values only known at apply time
   # so we can't assert on them in plan mode
+}
+
+run "test_deprecated_org_id_alias" {
+  command = plan
+
+  variables {
+    region           = "ap-southeast-1"
+    subnet_ids       = ["subnet-abc123"]
+    humanitec_org_id = "test-org-legacy"
+  }
+
+  assert {
+    condition     = local.orchestrator_org_id == "test-org-legacy"
+    error_message = "The deprecated organization ID alias should remain functional"
+  }
 }
 
 run "test_with_existing_cluster" {
@@ -69,7 +84,7 @@ run "test_with_existing_cluster" {
     region                    = "us-west-2"
     subnet_ids                = ["subnet-xyz789"]
     existing_ecs_cluster_name = "existing-cluster"
-    humanitec_org_id          = "test-org-abc"
+    orchestrator_org_id       = "test-org-abc"
   }
 
   assert {
@@ -84,8 +99,8 @@ run "test_without_existing_ecs_cluster_or_vpc" {
   command = plan
 
   variables {
-    region           = "us-east-1"
-    humanitec_org_id = "test-org-def"
+    region              = "us-east-1"
+    orchestrator_org_id = "test-org-def"
   }
 
   assert {
@@ -102,9 +117,9 @@ run "test_with_additional_tags" {
   command = plan
 
   variables {
-    region           = "us-east-1"
-    subnet_ids       = ["subnet-test123"]
-    humanitec_org_id = "test-org-def"
+    region              = "us-east-1"
+    subnet_ids          = ["subnet-test123"]
+    orchestrator_org_id = "test-org-def"
     additional_tags = {
       Environment = "test"
       Team        = "platform"
@@ -119,10 +134,10 @@ run "test_with_security_groups" {
   command = plan
 
   variables {
-    region             = "us-east-1"
-    subnet_ids         = ["subnet-test456"]
-    security_group_ids = ["sg-12345678", "sg-87654321"]
-    humanitec_org_id   = "test-org-ghi"
+    region              = "us-east-1"
+    subnet_ids          = ["subnet-test456"]
+    security_group_ids  = ["sg-12345678", "sg-87654321"]
+    orchestrator_org_id = "test-org-ghi"
   }
 
   # This test validates that the plan succeeds with security groups specified
@@ -134,7 +149,7 @@ run "test_with_existing_oidc_provider" {
   variables {
     region                     = "us-east-1"
     subnet_ids                 = ["subnet-test789"]
-    humanitec_org_id           = "test-org-jkl"
+    orchestrator_org_id        = "test-org-jkl"
     existing_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.humanitec.dev"
   }
 
@@ -145,10 +160,10 @@ run "test_with_custom_oidc_hostname" {
   command = plan
 
   variables {
-    region           = "eu-central-1"
-    subnet_ids       = ["subnet-test012"]
-    humanitec_org_id = "test-org-mno"
-    oidc_hostname    = "custom-oidc.example.com"
+    region              = "eu-central-1"
+    subnet_ids          = ["subnet-test012"]
+    orchestrator_org_id = "test-org-mno"
+    oidc_hostname       = "custom-oidc.example.com"
   }
 
   # This test validates that the plan succeeds with a custom OIDC hostname
@@ -160,7 +175,7 @@ run "test_with_existing_oidc_and_custom_hostname" {
   variables {
     region                     = "ap-northeast-1"
     subnet_ids                 = ["subnet-test345"]
-    humanitec_org_id           = "test-org-pqr"
+    orchestrator_org_id        = "test-org-pqr"
     existing_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/custom-oidc.example.com"
     oidc_hostname              = "custom-oidc.example.com"
   }

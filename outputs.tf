@@ -1,5 +1,10 @@
+output "orchestrator_role_arn" {
+  description = "The ARN of the IAM role for Platform Orchestrator"
+  value       = aws_iam_role.ecs_task_manager.arn
+}
+
 output "humanitec_role_arn" {
-  description = "The ARN of the IAM role for Humanitec"
+  description = "Deprecated alias for orchestrator_role_arn"
   value       = aws_iam_role.ecs_task_manager.arn
 }
 

@@ -39,9 +39,18 @@ variable "security_group_ids" {
   default     = []
 }
 
-variable "humanitec_org_id" {
-  description = "The Humanitec organization ID for OIDC federation"
+variable "orchestrator_org_id" {
+  description = "The Platform Orchestrator organization ID for OIDC federation"
   type        = string
+  default     = null
+  nullable    = true
+}
+
+variable "humanitec_org_id" {
+  description = "Deprecated alias for orchestrator_org_id"
+  type        = string
+  default     = null
+  nullable    = true
 }
 
 variable "existing_oidc_provider_arn" {
