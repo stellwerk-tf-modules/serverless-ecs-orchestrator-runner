@@ -19,6 +19,10 @@ mock_provider "aws" {
 
 mock_provider "platform-orchestrator" {}
 
+variables {
+  oidc_hostname = "oidc.orchestrator.example.com"
+}
+
 run "test_with_explicit_runner_id" {
   command = plan
 
@@ -150,7 +154,7 @@ run "test_with_existing_oidc_provider" {
     region                     = "us-east-1"
     subnet_ids                 = ["subnet-test789"]
     orchestrator_org_id        = "test-org-jkl"
-    existing_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.humanitec.dev"
+    existing_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.orchestrator.example.com"
   }
 
   # This test validates that the plan succeeds when using an existing OIDC provider

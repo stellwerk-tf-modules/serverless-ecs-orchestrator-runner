@@ -60,9 +60,8 @@ variable "existing_oidc_provider_arn" {
 }
 
 variable "oidc_hostname" {
-  description = "The hostname of the OIDC provider. Defaults to oidc.humanitec.dev"
+  description = "The hostname of the OIDC issuer exposed by your Platform Orchestrator installation"
   type        = string
-  default     = "oidc.humanitec.dev"
 }
 
 variable "environment" {

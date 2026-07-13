@@ -10,7 +10,7 @@ The ECS runner requires an ECS cluster and a subnet where to run tasks. You may 
 
 The module creates an S3 bucket and configures it for use as the TF state storage for the runner. The bucket name is exposed via the [outputs](#outputs).
 
-The hosted OIDC issuer currently remains `oidc.humanitec.dev`, which is why it is the module default. Set `oidc_hostname` explicitly when using another issuer.
+Set `oidc_hostname` to the hostname of the built-in OIDC issuer exposed by your Platform Orchestrator installation. The issuer must use publicly trusted TLS and be reachable by AWS.
 
 ## Usage
 
@@ -22,6 +22,7 @@ module "ecs_runner" {
   region              = "us-east-1"
   subnet_ids          = ["subnet-12345678", "subnet-87654321"]
   orchestrator_org_id = "my-org-id"
+  oidc_hostname       = "oidc.orchestrator.example.com"
 }
 ```
 
@@ -34,6 +35,7 @@ module "ecs_runner" {
   subnet_ids          = ["subnet-12345678", "subnet-87654321"]
   orchestrator_org_id = "my-org-id"
   runner_id           = "my-custom-runner"
+  oidc_hostname       = "oidc.orchestrator.example.com"
 }
 ```
 
@@ -46,6 +48,7 @@ module "ecs_runner" {
   subnet_ids          = ["subnet-12345678", "subnet-87654321"]
   orchestrator_org_id = "my-org-id"
   runner_id_prefix    = "prod-runner"
+  oidc_hostname       = "oidc.orchestrator.example.com"
 }
 ```
 
@@ -58,6 +61,7 @@ module "ecs_runner" {
   subnet_ids                = ["subnet-12345678", "subnet-87654321"]
   orchestrator_org_id       = "my-org-id"
   existing_ecs_cluster_name = "existing-cluster"
+  oidc_hostname             = "oidc.orchestrator.example.com"
 }
 ```
 
@@ -68,6 +72,7 @@ module "ecs_runner" {
   source = "github.com/stellwerk-tf-modules/serverless-ecs-orchestrator-runner?ref=vX.Y.Z"
   region              = "us-east-1"
   orchestrator_org_id = "my-org-id"
+  oidc_hostname       = "oidc.orchestrator.example.com"
 }
 ```
 
@@ -79,6 +84,7 @@ module "ecs_runner" {
   region              = "us-east-1"
   subnet_ids          = ["subnet-12345678", "subnet-87654321"]
   orchestrator_org_id = "my-org-id"
+  oidc_hostname       = "oidc.orchestrator.example.com"
 
   additional_tags = {
     Environment = "production"
@@ -97,6 +103,7 @@ module "ecs_runner" {
   subnet_ids          = ["subnet-12345678", "subnet-87654321"]
   orchestrator_org_id = "my-org-id"
   security_group_ids  = ["sg-12345678"]
+  oidc_hostname       = "oidc.orchestrator.example.com"
 }
 ```
 
@@ -108,7 +115,8 @@ module "ecs_runner" {
   region                     = "us-east-1"
   subnet_ids                 = ["subnet-12345678", "subnet-87654321"]
   orchestrator_org_id        = "my-org-id"
-  existing_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.humanitec.dev"
+  oidc_hostname              = "oidc.orchestrator.example.com"
+  existing_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.orchestrator.example.com"
 }
 ```
 
@@ -178,7 +186,7 @@ module "ecs_runner" {
 | <a name="input_existing_oidc_provider_arn"></a> [existing\_oidc\_provider\_arn](#input\_existing\_oidc\_provider\_arn) | The ARN of an existing OIDC provider to use. If not provided, a new OIDC provider will be created | `string` | `null` | no |
 | <a name="input_force_delete_s3"></a> [force\_delete\_s3](#input\_force\_delete\_s3) | Force delete the S3 state files bucket on destroy even if it's not empty | `bool` | `false` | no |
 | <a name="input_humanitec_org_id"></a> [humanitec\_org\_id](#input\_humanitec\_org\_id) | Deprecated alias for orchestrator\_org\_id | `string` | `null` | no |
-| <a name="input_oidc_hostname"></a> [oidc\_hostname](#input\_oidc\_hostname) | The hostname of the OIDC provider. Defaults to oidc.humanitec.dev | `string` | `"oidc.humanitec.dev"` | no |
+| <a name="input_oidc_hostname"></a> [oidc\_hostname](#input\_oidc\_hostname) | The hostname of the OIDC issuer exposed by your Platform Orchestrator installation | `string` | n/a | yes |
 | <a name="input_orchestrator_org_id"></a> [orchestrator\_org\_id](#input\_orchestrator\_org\_id) | The Platform Orchestrator organization ID for OIDC federation | `string` | `null` | no |
 | <a name="input_region"></a> [region](#input\_region) | The AWS region where resources will be created | `string` | n/a | yes |
 | <a name="input_runner_id"></a> [runner\_id](#input\_runner\_id) | The ID of the runner. If not provided, one will be generated using runner\_id\_prefix | `string` | `null` | no |
